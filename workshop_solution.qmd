@@ -12,7 +12,7 @@ execute:
 
 # Setup
 
-<!-- Run this chunk first. If you don't already have the tidyverse, `require()` returns `FALSE` and the package is installed and then loaded. Otherwise it loads the package. -->
+Run this chunk first. If you don't already have the tidyverse, `require()` returns `FALSE` and the package is installed and then loaded. Otherwise it loads the package.
 
 ```{r setup}
 #| message: false
@@ -44,7 +44,7 @@ This is **bold**. This is *italic*. This is `code`.
 
 ## Code chunks
 
-Insert a new chunk with Ctrl/Cmd + Alt + I, or by typing three backticks followed by `{r}`. Chunk labels can also be placed after the `{r}`. For example, this chunk is labeled `basic-chunk`. The code chunk runs if you click the green triangle in the top right of the chunk. Next to this green triangle is a button which lets you run all chunks above it. The gear provides chunk options, letting you change whether code, output, messages, and/or warnings show up in the rendered document. Chunk options are written as lines starting with `#|` at the top of the chunk, like the `#| message: false` in the setup chunk.
+Insert a new chunk with Ctrl/Cmd + Alt + I, or by typing three backticks followed by `{r}`. Chunk labels go after the `{r}`. For example, this chunk is labeled `basic-chunk`. The code chunk runs if you click the green triangle in the top right of the chunk. Next to this green triangle is a button which lets you run all chunks above it. The gear provides chunk options, letting you change whether code, output, messages, and/or warnings show up in the rendered document. Chunk options are written as lines starting with `#|` at the top of the chunk, like the `#| message: false` in the setup chunk.
 
 ```{r basic-chunk}
 d <- 1 + 1
@@ -283,3 +283,4 @@ starwars |>
 - Quarto documentation: <https://quarto.org/docs/guide/>
 - dplyr documentation: <https://dplyr.tidyverse.org/>
 - *R for Data Science* (free online): <https://r4ds.hadley.nz/>
+- McGill CDSI workshops: <https://www.mcgill.ca/cdsi/training/cdsi-workshops>
