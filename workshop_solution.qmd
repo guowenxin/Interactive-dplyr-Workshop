@@ -157,6 +157,30 @@ select(starwars, ends_with("_color"))
 select(starwars, -films, -vehicles, -starships)
 ```
 
+## `all_of()` and `any_of()`: select columns from a list
+
+Sometimes you already have a **character vector of column names**. Inside `select()`, `all_of()` and `any_of()` use that vector to choose columns.
+
+- `all_of()` requires **every** named column to exist. If one is missing, it gives an error. Use it for required columns.
+- `any_of()` selects the columns that **do** exist and skips missing names. Use it for optional columns or when datasets may differ.
+
+**Exercise 2.7:** Select `name`, `height`, and `mass` using `all_of()`
+
+```{r ex2-7-all-of}
+#| eval: false
+info <- c("name", "height", "mass")
+select(starwars, all_of(info))
+```
+
+**Exercise 2.8:** You want to reuse a reporting script that sometimes receives a dataset with a `bmi` column and sometimes does not. Use `any_of()` to select whichever requested columns are available. Notice that `bmi` is skipped rather than causing an error.
+
+```{r ex2-8-any-of}
+#| eval: false
+info_with_bmi <- c("name", "height", "mass", "bmi")
+select(starwars, any_of(info_with_bmi))
+```
+
+
 ## `filter()`: choose rows
 
 ```{r help-filter}
@@ -164,37 +188,37 @@ select(starwars, -films, -vehicles, -starships)
 help(filter, package = "dplyr")
 ```
 
-**Exercise 2.7:** Keep only characters taller than 200 cm.
+**Exercise 2.9:** Keep only characters taller than 200 cm.
 
-```{r ex2-7-filter-tall}
+```{r ex2-9-filter-tall}
 #| eval: false
 filter(starwars, height > 200)
 ```
 
-**Exercise 2.8:** Keep only characters whose species is `"Human"`. (Hint: use `==`, not `=`.)
+**Exercise 2.10:** Keep only characters whose species is `"Human"`. (Hint: use `==`, not `=`.)
 
-```{r ex2-8-filter-human}
+```{r ex2-10-filter-human}
 #| eval: false
 filter(starwars, species == "Human")
 ```
 
-**Exercise 2.9:** Keep only humans whose homeworld is `"Tatooine"`.
+**Exercise 2.11:** Keep only humans whose homeworld is `"Tatooine"`.
 
-```{r ex2-9-filter-tatooine}
+```{r ex2-11-filter-tatooine}
 #| eval: false
 filter(starwars, species == "Human" & homeworld == "Tatooine")
 ```
 
-**Exercise 2.10:** Keep only characters with blue or yellow eyes. (Hint: `|` or `%in%`)
+**Exercise 2.12:** Keep only characters with blue or yellow eyes. (Hint: `|` or `%in%`)
 
-```{r ex2-10-filter-eyes}
+```{r ex2-12-filter-eyes}
 #| eval: false
 filter(starwars, eye_color == "blue" | eye_color == "yellow")
 ```
 
-**Exercise 2.11:** Keep only characters whose mass is missing. (Hint: `is.na()`)
+**Exercise 2.13:** Keep only characters whose mass is missing. (Hint: `is.na()`)
 
-```{r ex2-11-filter-missing-mass}
+```{r ex2-13-filter-missing-mass}
 #| eval: false
 filter(starwars, is.na(mass))
 ```
@@ -206,26 +230,44 @@ filter(starwars, is.na(mass))
 help(mutate, package = "dplyr")
 ```
 
-**Exercise 2.12:** Add a column `height_m` with each character's height in metres.
+**Exercise 2.14:** Add a column `height_m` with each character's height in metres.
 
-```{r ex2-12-mutate-height-m}
+```{r ex2-14-mutate-height-m}
 #| eval: false
 mutate(starwars, height_m = height / 100)
 ```
 
-**Exercise 2.13:** Add a column `bmi` equal to mass divided by height in metres squared.
+**Exercise 2.15:** Add a column `bmi` equal to mass divided by height in metres squared.
 
-```{r ex2-13-mutate-bmi}
+```{r ex2-15-mutate-bmi}
 #| eval: false
 mutate(starwars, bmi = mass / (height / 100)^2)
 ```
 
-**Exercise 2.14:** Add a column `is_tall` that is `TRUE` when height is over 180 cm.
+**Exercise 2.16:** Add a column `is_tall` that is `TRUE` when height is over 180 cm.
 
-```{r ex2-14-mutate-is-tall}
+```{r ex2-16-mutate-is-tall}
 #| eval: false
 mutate(starwars, is_tall = height > 180)
 ```
+
+## `mutate(across())`: change several columns at once
+
+`mutate()` changes or creates columns. With `across()`, you can apply **the same function to multiple columns** without repeating the code for each one.
+
+`mutate(across(columns, function))`:
+
+- `columns` tells R which columns to change.
+- `function` tells R what to do to each selected column.
+
+**Exercise 2.17:** Round both `mass` and `birth_year` to integer
+
+```{r ex2-17-mutate-and-across}
+#| eval: false
+mutate(starwars, across(c(mass, birth_year), round, digits = 0))
+```
+
+*Brainstorm some other uses!*
 
 ## The pipe `|>`
 
@@ -239,9 +281,9 @@ starwars |> head(3)
 
 Shortcut: Ctrl/Cmd + Shift + M. (In RStudio, turn on Tools > Global Options > Code > "Use native pipe operator" to get `|>` instead of `%>%` if you prefer.)
 
-**Exercise 2.15:** Using one pipeline, keep only humans, add a `bmi` column, and keep only the `name`, `homeworld`, and `bmi` columns.
+**Exercise 2.18:** Using one pipeline, keep only humans, add a `bmi` column, and keep only the `name`, `homeworld`, and `bmi` columns.
 
-```{r ex2-15-pipeline}
+```{r ex2-18-pipeline}
 #| eval: false
 starwars |>
   filter(species == "Human") |>
