@@ -264,7 +264,7 @@ mutate(starwars, is_tall = height > 180)
 
 ```{r ex2-17-mutate-and-across}
 #| eval: false
-mutate(starwars, across(c(mass, birth_year), round, digits = 0))
+mutate(starwars, across(c(mass, birth_year), \(x) round(x, digits = 0)))
 ```
 
 *Brainstorm some other uses!*

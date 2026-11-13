@@ -1,0 +1,293 @@
+---
+title: "Everyday R Workshop 1: Quarto and dplyr"
+author: "Your Name"
+format:
+  html:
+    toc: true
+    embed-resources: true
+editor: source
+execute:
+  error: true
+---
+
+# Setup
+
+Run this chunk first. If you don't already have the tidyverse, `require()` returns `FALSE` and the package is installed and then loaded. Otherwise it loads the package.
+
+```{r setup}
+#| message: false
+if (!require("tidyverse")) {
+  install.packages("tidyverse", repos = "https://cloud.r-project.org")
+  library(tidyverse)
+}
+```
+
+# Part 1: Quarto
+
+A Quarto document (`.qmd`) has three parts:
+
+1. A **YAML header** at the top (between the `---` lines) with settings like the title and output format.
+2. **Text** written in Markdown.
+3. **Code chunks** that run R code and show the results.
+
+Click **Render** (or press Ctrl/Cmd + Shift + K) to turn this file into an HTML page.
+
+## Headings
+
+Headings start with `#`. More `#`s give smaller headings. Note that you also need a space between the `#`s and the heading text.
+
+### This is a level-3 heading
+
+## Text formatting
+
+This is **bold**. This is *italic*. This is `code`.
+
+## Code chunks
+
+Insert a new chunk with Ctrl/Cmd + Alt + I, or by typing three backticks followed by `{r}`. Chunk labels go after the `{r}`. For example, this chunk is labeled `basic-chunk`. The code chunk runs if you click the green triangle in the top right of the chunk. Next to this green triangle is a button which lets you run all chunks above it. The gear provides chunk options, letting you change whether code, output, messages, and/or warnings show up in the rendered document. Chunk options are written as lines starting with `#|` at the top of the chunk, like the `#| message: false` in the setup chunk.
+
+```{r basic-chunk}
+d <- 1 + 1
+d
+```
+
+## Inline code
+
+You can print variables directly in your text, like so: `r d`.\
+This allows you to change your code without needing to update your descriptions or interpretations.
+
+## Bonus: LaTeX math
+
+Quarto can display math equations written in LaTeX. Put math between single dollar signs for inline math, like $x^2 + y^2 = z^2$, or between double dollar signs to display it on its own line:
+
+$$
+\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
+$$
+
+This is the formula for the mean (average) of $n$ numbers.
+
+Some common pieces of LaTeX:
+
+| Write this | To get |
+|---------------------|:------------------:|
+| `x^2`               | $x^2$              |
+| `x_i`               | $x_i$              |
+| `\frac{a}{b}`       | $\frac{a}{b}$      |
+| `\sqrt{x}`          | $\sqrt{x}$         |
+| `\sum_{i=1}^{n}`    | $\sum_{i=1}^{n}$   |
+| `\alpha, \beta, \mu` | $\alpha, \beta, \mu$ |
+| `\leq, \geq, \neq`  | $\leq, \geq, \neq$ |
+| `\text{mass}`       | $\text{mass}$      |
+
+Use curly braces `{}` to group things: `x^{10}` gives $x^{10}$, but `x^10` gives $x^10$.
+
+LaTeX treats letters as variables and shows them in italics with extra spacing. To write ordinary words inside math, wrap them in `\text{}`: `BMI` gives $BMI$, but `\text{BMI}` gives $\text{BMI}$.
+
+**Bonus exercise:** Write the formula for body mass index (BMI) as displayed math. BMI is mass in kilograms divided by height in metres squared.
+
+# Part 2: dplyr
+
+## Meet the data
+
+We will use `starwars`, a dataset that comes with dplyr. Each row is a character from the Star Wars films.
+
+```{r starwars-data}
+starwars
+```
+
+## Function Basics
+
+Functions take inputs (arguments) and return outputs. For example, `mean()` takes a vector of numbers and returns their average.
+
+```{r mean-example}
+mean(c(2, 4, 6))
+```
+
+**Exercise 2.1:** Use the `help()` function to see the documentation for `glimpse()`.
+
+```{r ex2-1-help-glimpse}
+
+```
+
+**Exercise 2.2:** Use the `glimpse()` function on `starwars` to see every column, its type, and its first few values.
+
+```{r ex2-2-glimpse}
+
+```
+
+## `select()`: choose columns
+
+```{r help-select}
+#| eval: false
+help(select, package = "dplyr")
+```
+
+**Exercise 2.3:** Select the `name`, `species`, and `homeworld` columns.
+
+```{r ex2-3-select-columns}
+
+```
+
+**Exercise 2.4:** Select every column from `name` to `mass`. (Hint: `:`)
+
+```{r ex2-4-select-range}
+
+```
+
+**Exercise 2.5:** Select every column whose name ends with `"_color"`. (Hint: `ends_with()`)
+
+```{r ex2-5-select-ends-with}
+
+```
+
+**Exercise 2.6:** Select every column *except* `films`, `vehicles`, and `starships`. (Hint: `-`)
+
+```{r ex2-6-select-except}
+
+```
+
+## `all_of()` and `any_of()`: select columns from a list
+
+Sometimes you already have a **character vector of column names**. Inside `select()`, `all_of()` and `any_of()` use that vector to choose columns.
+
+- `all_of()` requires **every** named column to exist. If one is missing, it gives an error. Use it for required columns.
+- `any_of()` selects the columns that **do** exist and skips missing names. Use it for optional columns or when datasets may differ.
+
+**Exercise 2.7:** Select `name`, `height`, and `mass` using `all_of()`
+
+```{r ex2-7-all-of}
+
+```
+
+**Exercise 2.8:** You want to reuse a reporting script that sometimes receives a dataset with a `bmi` column and sometimes does not. Use `any_of()` to select whichever requested columns are available. Notice that `bmi` is skipped rather than causing an error.
+
+```{r ex2-8-any-of}
+info_with_bmi <- c("name", "height", "mass", "bmi")
+
+```
+
+## `filter()`: choose rows
+
+```{r help-filter}
+#| eval: false
+help(filter, package = "dplyr")
+```
+
+**Exercise 2.9:** Keep only characters taller than 200 cm.
+
+```{r ex2-9-filter-tall}
+
+```
+
+**Exercise 2.10:** Keep only characters whose species is `"Human"`. (Hint: use `==`, not `=`.)
+
+```{r ex2-10-filter-human}
+
+```
+
+**Exercise 2.11:** Keep only humans whose homeworld is `"Tatooine"`.
+
+```{r ex2-11-filter-tatooine}
+
+```
+
+**Exercise 2.12:** Keep only characters with blue or yellow eyes. (Hint: `|` or `%in%`)
+
+```{r ex2-12-filter-eyes}
+
+```
+
+**Exercise 2.13:** Keep only characters whose mass is missing. (Hint: `is.na()`)
+
+```{r ex2-13-filter-missing-mass}
+
+```
+
+## `mutate()`: create or change columns
+
+```{r help-mutate}
+#| eval: false
+help(mutate, package = "dplyr")
+```
+
+**Exercise 2.14:** Add a column `height_m` with each character's height in metres.
+
+```{r ex2-14-mutate-height-m}
+
+```
+
+**Exercise 2.15:** Add a column `bmi` equal to mass divided by height in metres squared.
+
+```{r ex2-15-mutate-bmi}
+
+```
+
+**Exercise 2.16:** Add a column `is_tall` that is `TRUE` when height is over 180 cm.
+
+```{r ex2-16-mutate-is-tall}
+
+```
+
+## `mutate(across())`: change several columns at once
+
+`mutate()` changes or creates columns. With `across()`, you can apply **the same function to multiple columns** without repeating the code for each one.
+
+`mutate(across(columns, function))`:
+
+- `columns` tells R which columns to change.
+- `function` tells R what to do to each selected column.
+
+**Exercise 2.17:** Round both `mass` and `birth_year` to integer
+
+```{r ex2-17-mutate-and-across}
+
+```
+
+*Brainstorm some other uses!*
+
+## The pipe `|>`
+
+The pipe takes whatever is on its left and passes it as the first argument to the function on its right. You can read `|>` as "and then".
+
+```{r pipe-example}
+# These two lines do the same thing
+head(starwars, 3)
+starwars |> head(3)
+```
+
+Shortcut: Ctrl/Cmd + Shift + M. (In RStudio, turn on Tools > Global Options > Code > "Use native pipe operator" to get `|>` instead of `%>%` if you prefer.)
+
+**Exercise 2.18:** Using one pipeline, keep only humans, add a `bmi` column, and keep only the `name`, `homeworld`, and `bmi` columns.
+
+```{r ex2-18-pipeline}
+
+```
+
+# Bonus
+
+If you finish early, try these.
+
+**Exercise B.1:** Sort characters from tallest to shortest. (Hint: `arrange()` and `desc()`)
+
+```{r exB-1-arrange}
+
+```
+
+**Exercise B.2:** Count how many characters there are of each species. (Hint: `count()`)
+
+```{r exB-2-count}
+
+```
+
+**Exercise B.3:** Find the average height for each species. (Hint: `group_by()` and `summarise()`, with `na.rm = TRUE`)
+
+```{r exB-3-summarise}
+
+```
+
+# Resources
+
+- Quarto documentation: <https://quarto.org/docs/guide/>
+- dplyr documentation: <https://dplyr.tidyverse.org/>
+- *R for Data Science* (free online): <https://r4ds.hadley.nz/>
+- McGill CDSI workshops: <https://www.mcgill.ca/cdsi/training/cdsi-workshops>
