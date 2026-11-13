@@ -289,5 +289,6 @@ If you finish early, try these.
 
 - Quarto documentation: <https://quarto.org/docs/guide/>
 - dplyr documentation: <https://dplyr.tidyverse.org/>
+- Posit Cheatsheets: <https://rstudio.github.io/cheatsheets/>
 - *R for Data Science* (free online): <https://r4ds.hadley.nz/>
 - McGill CDSI workshops: <https://www.mcgill.ca/cdsi/training/cdsi-workshops>
