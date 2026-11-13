@@ -287,6 +287,7 @@ If you finish early, try these.
 
 # Resources
 
+- Workshop Solutions: <https://github.com/guowenxin/Interactive-dplyr-Workshop>
 - Quarto documentation: <https://quarto.org/docs/guide/>
 - dplyr documentation: <https://dplyr.tidyverse.org/>
 - Posit Cheatsheets: <https://rstudio.github.io/cheatsheets/>
